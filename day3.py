@@ -77,7 +77,7 @@ for instruction in wire[1]:
 
 def pushIntersections(quadrantNumber):
     for coordinate0 in paths[0][quadrantNumber]:
-        if coordinate0 in paths[1][quadrantNumber]:
+        if coordinate0 in paths[1][quadrantNumber]:  # Only check same quadrant
             intersects.append(coordinate0)
     pass
 
