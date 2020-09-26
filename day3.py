@@ -1,3 +1,4 @@
+import threading
 paths = [[], []]
 paths[0] = [[], [], [], [], []]
 paths[1] = [[], [], [], [], []]
@@ -82,11 +83,21 @@ def pushIntersections(quadrantNumber):
     pass
 
 
-pushIntersections(0)
-pushIntersections(1)
-pushIntersections(2)
-pushIntersections(3)
-pushIntersections(4)
+thread0 = threading.Thread(target=(pushIntersections), args=[0])
+thread0.start()
+thread1 = threading.Thread(target=(pushIntersections), args=[1])
+thread1.start()
+thread2 = threading.Thread(target=(pushIntersections), args=[2])
+thread2.start()
+thread3 = threading.Thread(target=(pushIntersections), args=[3])
+thread3.start()
+thread4 = threading.Thread(target=(pushIntersections), args=[4])
+thread4.start()
+thread0.join()
+thread1.join()
+thread2.join()
+thread3.join()
+thread4.join()
 for coordinate in intersects:
     coordinates = coordinate.split(", ")
     manhattan = (abs(int(coordinates[0])) + abs(int(coordinates[1])))
