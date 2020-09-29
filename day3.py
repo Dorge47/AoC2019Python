@@ -5,6 +5,8 @@ paths[1] = [[], [], [], [], []]
 wire = []
 intersects = []
 minDistance = 99999
+steps = 0
+fewestSteps = 99999
 inp = ("R997,D543,L529,D916,R855,D705,L159,U444,R234,U639,L178,D682,L836,U333,"
        + "R571,D906,L583,U872,L733,U815,L484,D641,R649,U378,L26,U66,L659,D27,R"
        + "4,U325,L264,D711,L837,D986,L38,U623,L830,D369,L469,D704,L302,U143,L7"
@@ -55,7 +57,7 @@ wire[1] = wire[1].split(",")
 
 
 def appendCoordinates(xCoord, yCoord, pathNumber):
-    coPair = (str(xCoord) + ", " + str(yCoord))
+    coPair = [xCoord, yCoord, steps]
     if xCoord == 0 or yCoord == 0:  # Axes
         paths[pathNumber][0].append(coPair)
     elif xCoord > 0 and yCoord > 0:  # First quadrant
@@ -70,56 +72,77 @@ def appendCoordinates(xCoord, yCoord, pathNumber):
 
 x = 0
 y = 0
-paths[0][0].append(str(x) + ", " + str(y))
-paths[1][0].append(str(x) + ", " + str(y))
+paths[0][0].append([x, y, 0])
+paths[1][0].append([x, y, 0])
 for instruction in wire[0]:
     direction = instruction[0]
     length = int(instruction[1:len(instruction)])
     # Switch/case who?
     if direction == "U":
         for unit in range(0, length):
+            steps = steps + 1
             y = y + 1
             appendCoordinates(x, y, 0)
     if direction == "R":
         for unit in range(0, length):
+            steps = steps + 1
             x = x + 1
             appendCoordinates(x, y, 0)
     if direction == "D":
         for unit in range(0, length):
+            steps = steps + 1
             y = y - 1
             appendCoordinates(x, y, 0)
     if direction == "L":
         for unit in range(0, length):
+            steps = steps + 1
             x = x - 1
             appendCoordinates(x, y, 0)
 x = 0
 y = 0
+steps = 0
 for instruction in wire[1]:
     direction = instruction[0]
     length = int(instruction[1:len(instruction)])
     if direction == "U":
         for unit in range(0, length):
+            steps = steps + 1
             y = y + 1
             appendCoordinates(x, y, 1)
     if direction == "R":
         for unit in range(0, length):
+            steps = steps + 1
             x = x + 1
             appendCoordinates(x, y, 1)
     if direction == "D":
         for unit in range(0, length):
+            steps = steps + 1
             y = y - 1
             appendCoordinates(x, y, 1)
     if direction == "L":
         for unit in range(0, length):
+            steps = steps + 1
             x = x - 1
             appendCoordinates(x, y, 1)
 
 
 def pushIntersections(quadrantNumber):
-    for coordinate0 in paths[0][quadrantNumber]:
-        if coordinate0 in paths[1][quadrantNumber]:  # Only check same quadrant
-            intersects.append(coordinate0)
-    pass
+    for coord0 in paths[0][quadrantNumber]:
+        for coord1 in paths[1][quadrantNumber]:  # Only check same quadrant
+            # Only check equality of coordinates, not step number
+            if not (coord0[0:2] == coord1[0:2]):
+                continue
+            else:
+                stepSum = coord0[2] + coord1[2]
+                skipThrough = False
+                for existingInter in intersects:
+                    if coord0[0:2] == existingInter[0:2]:
+                        skipThrough = True
+                        if stepSum < existingInter[2]:
+                            existingInter[2] = stepSum
+                        break
+                if not skipThrough:
+                    intersects.append([coord0[0], coord0[1], stepSum])
 
 
 thread0 = threading.Thread(target=(pushIntersections), args=[0])
@@ -138,8 +161,10 @@ thread2.join()
 thread3.join()
 thread4.join()
 for coordinate in intersects:
-    coordinates = coordinate.split(", ")
-    manhattan = (abs(int(coordinates[0])) + abs(int(coordinates[1])))
+    manhattan = (abs(coordinate[0]) + abs(coordinate[1]))
     if manhattan < minDistance and not manhattan == 0:
         minDistance = manhattan
+    if coordinate[2] < fewestSteps and not coordinate[2] == 0:
+        fewestSteps = coordinate[2]
 print(minDistance)
+print(fewestSteps)
