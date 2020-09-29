@@ -1,8 +1,10 @@
+import multiprocessing
 paths = [[], []]
 paths[0] = [[], [], [], [], []]
 paths[1] = [[], [], [], [], []]
 wire = []
 intersects = []
+quadInter = [[], [], [], [], []]
 minDistance = 99999
 steps = 0
 fewestSteps = 99999
@@ -125,30 +127,64 @@ for instruction in wire[1]:
             appendCoordinates(x, y, 1)
 
 
-def pushIntersections(quadrantNumber):
-    for coord0 in paths[0][quadrantNumber]:
-        for coord1 in paths[1][quadrantNumber]:  # Only check same quadrant
+def pushIntersections(quadrantNumber, returns):
+    # Use temp lists to avoid calling outside the function too much
+    paths0 = paths[0][quadrantNumber]
+    paths1 = paths[1][quadrantNumber]  # Only check same quadrant
+    tempInter = []
+    for coord0 in paths0:
+        for coord1 in paths1:
             # Only check equality of coordinates, not step number
             if not (coord0[0:2] == coord1[0:2]):
                 continue
             else:
                 stepSum = coord0[2] + coord1[2]
                 skipThrough = False
-                for existingInter in intersects:
+                for existingInter in tempInter:
                     if coord0[0:2] == existingInter[0:2]:
                         skipThrough = True
                         if stepSum < existingInter[2]:
                             existingInter[2] = stepSum
                         break
                 if not skipThrough:
-                    intersects.append([coord0[0], coord0[1], stepSum])
+                    tempInter.append([coord0[0], coord0[1], stepSum])
+    returns[:] = tempInter
 
 
-pushIntersections(0)
-pushIntersections(1)
-pushIntersections(2)
-pushIntersections(3)
-pushIntersections(4)
+jobs = []
+manager = multiprocessing.Manager()
+arr0 = manager.list()
+process0 = multiprocessing.Process(
+    target=pushIntersections, args=(0, arr0))
+jobs.append(process0)
+arr1 = manager.list()
+process1 = multiprocessing.Process(
+    target=pushIntersections, args=(1, arr1))
+jobs.append(process1)
+arr2 = manager.list()
+process2 = multiprocessing.Process(
+    target=pushIntersections, args=(2, arr2))
+jobs.append(process2)
+arr3 = manager.list()
+process3 = multiprocessing.Process(
+    target=pushIntersections, args=(3, arr3))
+jobs.append(process3)
+arr4 = manager.list()
+process4 = multiprocessing.Process(
+    target=pushIntersections, args=(4, arr4))
+jobs.append(process4)
+for j in jobs:
+    j.start()
+for j in jobs:
+    j.join()
+quadInter[0] = arr0[:]
+quadInter[1] = arr1[:]
+quadInter[2] = arr2[:]
+quadInter[3] = arr3[:]
+quadInter[4] = arr4[:]
+for i in range(0, 5):
+    for c in quadInter[i]:
+        intersects.append(c)
 for coordinate in intersects:
     manhattan = (abs(coordinate[0]) + abs(coordinate[1]))
     if manhattan < minDistance and not manhattan == 0:
