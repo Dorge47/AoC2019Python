@@ -12,19 +12,19 @@ inputNums = [129880, 115705, 118585, 124631, 81050, 138183, 61173, 95354,
              88599, 126780, 65012, 67621, 129699, 149639, 97590, 147527,
              117462, 146709, 60527, 107643, 92956, 72177, 92285, 62475, 63099,
              66904, 77268, 62945, 134364, 106924, 117842, 130016, 123712]
-sum = 0
+fuelSum = 0
 print("Length of inputNums is " + str(len(inputNums)))
-for i in range(0, len(inputNums)):
-    temp = (math.floor(inputNums[i]/3)-2)
-    sum += temp
-    # print("Number for " + str(i) + "(" + str(inputNums[i]) + ") is "
+for index, num in enumerate(inputNums):
+    temp = (math.floor(num/3)-2)
+    fuelSum += temp
+    # print("Number for " + str(index) + "(" + str(num) + ") is "
     #       + str(temp) + ", new sum is " + str(sum))
-print(sum)
+print(fuelSum)
 # Part 2
-sum = 0
-for i in range(0, len(inputNums)):
-    temp = [math.floor(inputNums[i]/3)-2]
+fuelSum = 0
+for num in inputNums:
+    temp = [math.floor(num/3)-2]
     while (math.floor(temp[-1]/3)-2) > 0:
         temp.append(math.floor(temp[-1]/3)-2)
-    sum += numpy.sum(temp)
-print(sum)
+    fuelSum += numpy.sum(temp)
+print(fuelSum)

@@ -6,38 +6,35 @@ pwdList2 = []
 def verifyNum(numToVerify):
     repeats = False
     n = str(numToVerify)
-    if not len(n) == 6:
+    if len(n) != 6:
         return False
-    for i in range(0, len(n)):
-        if i == 0:
+    for index, num in enumerate(n):
+        if index == 0:
             continue
-        else:
-            if n[i] < n[i-1]:
-                return False
-            if n[i] == n[i-1]:
-                repeats = True
+        if num < n[index-1]:
+            return False
+        if num == n[index-1]:
+            repeats = True
     return repeats
 
 
 def verifyNum2(numToVerify):
     repeats = False
     n = str(numToVerify)
-    if not len(n) == 6:
+    if len(n) != 6:
         return False
-    for i in range(0, len(n)):
-        if i == 0:
+    for index, num in enumerate(n):
+        if index == 0:
             continue
-        else:
-            if n[i] < n[i-1]:
-                return False
-        compareNum = int(n[i])
+        if num < n[index-1]:
+            return False
+        compareNum = int(num)
         occurences = 1
-        for j in range(0, len(n)):
-            if i == j:
+        for index2, num2 in enumerate(n):
+            if index == index2:
                 continue
-            else:
-                if int(n[j]) == compareNum:
-                    occurences += 1
+            if int(num2) == compareNum:
+                occurences += 1
         if occurences == 2:
             repeats = True
     return repeats

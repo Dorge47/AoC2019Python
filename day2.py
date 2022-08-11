@@ -14,7 +14,7 @@ inputNums[2] = 2
 for i in range(0, len(inputNums), 4):
     if inputNums[i] == 99:
         break
-    elif inputNums[i] == 1:
+    if inputNums[i] == 1:
         inputNums[inputNums[i+3]] = (inputNums[inputNums[i+1]]
                                      + inputNums[inputNums[i+2]])
     elif inputNums[i] == 2:
@@ -27,8 +27,8 @@ print(inputNums[0])
 
 
 def part_two():
-    for x in range(0, 100):
-        for y in range(0, 100):
+    for x in range(100):
+        for y in range(100):
             inputNums = [1, 0, 0, 3, 1, 1, 2, 3, 1, 3, 4, 3, 1, 5, 0, 3, 2, 1,
                          10, 19, 2, 6, 19, 23, 1, 23, 5, 27, 1, 27, 13, 31, 2,
                          6, 31, 35, 1, 5, 35, 39, 1, 39, 10, 43, 2, 6, 43, 47,
@@ -47,7 +47,7 @@ def part_two():
             for i in range(0, len(inputNums), 4):
                 if inputNums[i] == 99:
                     break
-                elif inputNums[i] == 1:
+                if inputNums[i] == 1:
                     inputNums[inputNums[i+3]] = (inputNums[inputNums[i+1]]
                                                  + inputNums[inputNums[i+2]])
                 elif inputNums[i] == 2:
