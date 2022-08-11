@@ -77,54 +77,56 @@ paths[0][0].append([x, y, 0])
 paths[1][0].append([x, y, 0])
 for instruction in wire[0]:
     direction = instruction[0]
-    length = int(instruction[1:len(instruction)])
-    # Switch/case who?
-    if direction == "U":
-        for unit in range(0, length):
-            steps = steps + 1
-            y = y + 1
-            appendCoordinates(x, y, 0)
-    if direction == "R":
-        for unit in range(0, length):
-            steps = steps + 1
-            x = x + 1
-            appendCoordinates(x, y, 0)
-    if direction == "D":
-        for unit in range(0, length):
-            steps = steps + 1
-            y = y - 1
-            appendCoordinates(x, y, 0)
-    if direction == "L":
-        for unit in range(0, length):
-            steps = steps + 1
-            x = x - 1
-            appendCoordinates(x, y, 0)
+    length = int(instruction[1:])
+    # 3.10 GAVE US SWITCH/CASE BABYYYYYYY
+    match direction:
+        case "U":
+            for unit in range(length):
+                steps = steps + 1
+                y = y + 1
+                appendCoordinates(x, y, 0)
+        case "R":
+            for unit in range(length):
+                steps = steps + 1
+                x = x + 1
+                appendCoordinates(x, y, 0)
+        case "D":
+            for unit in range(length):
+                steps = steps + 1
+                y = y - 1
+                appendCoordinates(x, y, 0)
+        case"L":
+            for unit in range(length):
+                steps = steps + 1
+                x = x - 1
+                appendCoordinates(x, y, 0)
 x = 0
 y = 0
 steps = 0
 for instruction in wire[1]:
     direction = instruction[0]
-    length = int(instruction[1:len(instruction)])
-    if direction == "U":
-        for unit in range(0, length):
-            steps = steps + 1
-            y = y + 1
-            appendCoordinates(x, y, 1)
-    if direction == "R":
-        for unit in range(0, length):
-            steps = steps + 1
-            x = x + 1
-            appendCoordinates(x, y, 1)
-    if direction == "D":
-        for unit in range(0, length):
-            steps = steps + 1
-            y = y - 1
-            appendCoordinates(x, y, 1)
-    if direction == "L":
-        for unit in range(0, length):
-            steps = steps + 1
-            x = x - 1
-            appendCoordinates(x, y, 1)
+    length = int(instruction[1:])
+    match direction:
+        case "U":
+            for unit in range(length):
+                steps = steps + 1
+                y = y + 1
+                appendCoordinates(x, y, 1)
+        case "R":
+            for unit in range(length):
+                steps = steps + 1
+                x = x + 1
+                appendCoordinates(x, y, 1)
+        case "D":
+            for unit in range(length):
+                steps = steps + 1
+                y = y - 1
+                appendCoordinates(x, y, 1)
+        case "L":
+            for unit in range(length):
+                steps = steps + 1
+                x = x - 1
+                appendCoordinates(x, y, 1)
 
 
 def pushIntersections(quadrantNumber, returns):
